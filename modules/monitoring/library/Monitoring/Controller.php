@@ -9,6 +9,7 @@ use Icinga\Data\Filter\Filter;
 use Icinga\Data\Filterable;
 use Icinga\File\Csv;
 use Icinga\File\Json;
+use Icinga\Util\Buffer;
 use Icinga\Web\Controller as IcingaWebController;
 use Icinga\Web\Url;
 
@@ -40,7 +41,7 @@ class Controller extends IcingaWebController
         }
         if ($this->_getParam('format') === 'json'
             || $this->_request->getHeader('Accept') === 'application/json') {
-            $json = Json::create($query);
+            $buffer = Json::queryToStream($query, new Buffer());
 
             $response = $this->getResponse();
             $response
@@ -52,13 +53,16 @@ class Controller extends IcingaWebController
             while (ob_get_level()) {
                 ob_end_clean();
             }
-            $json->dump();
+
+            /** @var Buffer $buffer */
+            $buffer->rewind();
+            $buffer->fpassthru();
 
             exit;
         }
         if ($this->_getParam('format') === 'csv'
             || $this->_request->getHeader('Accept') === 'text/csv') {
-            $csv = Csv::fromQuery($query);
+            $buffer = Csv::queryToStream($query, new Buffer());
 
             $response = $this->getResponse();
             $response
@@ -70,7 +74,10 @@ class Controller extends IcingaWebController
             while (ob_get_level()) {
                 ob_end_clean();
             }
-            $csv->dump();
+
+            /** @var Buffer $buffer */
+            $buffer->rewind();
+            $buffer->fpassthru();
 
             exit;
         }
