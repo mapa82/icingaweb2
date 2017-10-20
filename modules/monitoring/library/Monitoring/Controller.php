@@ -56,8 +56,13 @@ class Controller extends IcingaWebController
                 ->setHeader('Content-Type', 'text/csv')
                 ->setHeader('Cache-Control', 'no-store')
                 ->setHeader('Content-Disposition', 'attachment; filename=' . $this->getRequest()->getActionName() . '.csv')
-                ->appendBody((string) Csv::fromQuery($query))
-                ->sendResponse();
+                ->sendHeaders();
+
+            while (ob_get_level()) {
+                ob_end_clean();
+            }
+            Csv::fromQuery($query)->dump();
+
             exit;
         }
     }
