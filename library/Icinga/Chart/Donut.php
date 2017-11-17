@@ -2,18 +2,57 @@
 
 namespace Icinga\Chart;
 
+/** Donut chart implementation */
 class Donut
 {
-    protected $radius = 100 / (2 * M_PI);
 
-    protected $centerColor = '#fff';
+    /**
+     * Thickness of the donut ring
+     *
+     * @var int
+     */
+    protected $thickness = 6;
 
-    protected $ringColor = '#eee';
+    /**
+     * Radius based of 100 to simplify the calculations
+     *
+     * 100 / (2 * M_PI)
+     *
+     * @var float
+     */
+    protected $radius = 15.9154943092;
 
+    /**
+     * Color of the hole in the donut
+     *
+     * Transparent by default so it can be placed anywhere with ease
+     *
+     * @var string
+     */
+    protected $centerColor = 'transparent';
+
+    /**
+     * The different colored parts that represent the data
+     *
+     * @var array
+     */
     protected $slices = array();
 
+    /**
+     * The total amount of data units
+     *
+     * @var int
+     */
     protected $count = 0;
 
+    /**
+     * Adds a colored part that represent the data
+     *
+     * @param   integer     $data           Units of data
+     * @param   array       $attributes     HTML attributes for this slice. (For example ['class' => 'slice-state-ok'])
+     *
+     * @return  $this
+     */
     public function addSlice($data, $attributes = array())
     {
         $this->slices[] = array($data, $attributes);
@@ -23,97 +62,98 @@ class Donut
         return $this;
     }
 
+    /**
+     * Set the thickness for this Donut
+     *
+     * @param   integer $thickness
+     *
+     * @return  $this
+     */
+    public function setThickness($thickness) {
+        $this->thickness = $thickness;
+        return $this;
+    }
+
+    /**
+     * Set the center color for this Donut
+     *
+     * @param   string  $centerColor
+     *
+     * @return  $this
+     */
+    public function setCenterColor($centerColor) {
+        $this->centerColor = $centerColor;
+        return $this;
+    }
+
+    /**
+     * Put together all slices of this Donut
+     *
+     * @return  array   $svg
+     */
     protected function assemble()
     {
+        // svg tag containing the ring
         $svg = array(
             'tag'        => 'svg',
             'attributes' => array(
-                'xmlns'     => 'http://www.w3.org/2000/svg', 'viewbox' => '0 0 40 40',
-                'max-width' => '100%', 'max-height' => '100%',
-                'style'     => 'flex: 1;'
+                'xmlns'         => 'http://www.w3.org/2000/svg',
+                'viewbox'       => '0 0 40 40',
+                'class'         => 'svg-donut-graph'
             ),
             'content' => array()
         );
 
+        // Donut hole
         $svg['content'][] = array(
             'tag'        => 'circle',
             'attributes' => array(
                 'cx'   => 20,
                 'cy'   => 20,
                 'r'    => $this->radius,
-                'fill' => $this->centerColor
-            )
-        );
-
-        $svg['content'][] = array(
-            'tag'        => 'circle',
-            'attributes' => array(
-                'cx'           => 20,
-                'cy'           => 20,
-                'r'            => $this->radius,
-                'fill'         => 'transparent',
-                'stroke'       => $this->ringColor,
-                'stroke-width' => 4
+                'fill' => 'transparent'
             )
         );
 
         $slices = $this->slices;
 
         array_walk($slices, function(&$slice) {
-            $slice[0] = round(100 / $this->count * $slice[0], 1);
+
+            $slice[0] = round(100 / $this->count * $slice[0], 2);
         });
 
-        array_multisort(array_map(function ($slice) {
-            return $slice[0];
-        }, $slices), SORT_DESC, $slices);
-
-        $g = array(
-            'tag'        => 'g',
-            'attributes' => array(
-                'transform' => 'rotate(-90 20 20)'
-            ),
-            'content' => array()
-        );
-
-        $offset = 0;
+        // on 0 the donut would start at "3 o'clock" and the offset shifts counterclockwise
+        $offset = 25;
 
         foreach ($slices as $slice) {
-            $g['content'][] = array(
+            $svg['content'][] = array(
                 'tag'        => 'circle',
                 'attributes' => $slice[1] + array(
                     'cx'                => 20,
                     'cy'                => 20,
                     'r'                 => $this->radius,
                     'fill'              => 'transparent',
-                    'stroke-width'      => 4,
+                    'stroke-width'      => $this->thickness,
                     'stroke-dasharray'  => $slice[0] . ' ' . (100 - $slice[0]),
                     'stroke-dashoffset' => $offset
                 )
             );
-
-            $offset += (100 - $slice[0]);
+            // negative values shift in the clockwise direction
+            $offset -= $slice[0];
         }
-
-        $svg['content'][] = $g;
-
-        $svg['content'][] = array(
-            'tag'        => 'text',
-            'attributes' => array(
-                'x'                  => '50%',
-                'y'                  => '50%',
-                'text-anchor'        => 'middle',
-                'alignment-baseline' => 'middle'
-            ),
-            'content' => $this->count
-        );
 
         return $svg;
     }
 
     protected function encode($content)
     {
-        // TODO(el): Implement
-        return $content;
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+            $replaceFlags = ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5;
+        } else {
+            $replaceFlags = ENT_COMPAT | ENT_IGNORE;
+        }
+
+        return htmlspecialchars($content, $replaceFlags, 'UTF-8', true);
     }
 
     protected function renderAttributes(array $attributes)
@@ -174,10 +214,3 @@ class Donut
         return $this->renderContent($svg);
     }
 }
-
-$donut = new Donut();
-$donut->addSlice(35, array('stroke' => 'red'));
-$donut->addSlice(4546, array('stroke' => 'green'));
-$donut->addSlice(789, array('stroke' => 'yellow'));
-
-echo $donut->render();
