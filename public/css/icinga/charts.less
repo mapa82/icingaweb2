@@ -40,6 +40,10 @@
   stroke: @color-pending;
 }
 
+.slice-state-not-checked {
+  stroke: @gray-light;
+}
+
 .svg-donut-graph {
   flex: 1;
   max-height: 100%;
@@ -60,18 +64,29 @@
 
 .svg-donut-label-big {
   fill: @color-critical;
-  font-size: 1.3em;
+  font-size: 1.2em;
   line-height: 1;
   text-anchor: middle;
 }
 
 .svg-donut-label-small {
   fill: @text-color;
-  font-size: 0.15em;
+  font-size: 0.225em;
   text-transform: lowercase;
   text-anchor: middle;
   -moz-transform: translateY(0.35em);
   -ms-transform: translateY(0.35em);
   -webkit-transform: translateY(0.35em);
   transform: translateY(0.35em);
+}
+
+.svg-donut-container {
+  display: inline-block;
+  width: 49%;
+  min-width: 35em;
+}
+
+.svg-donut {
+  width: 50%;
+  min-width: 11em;
 }

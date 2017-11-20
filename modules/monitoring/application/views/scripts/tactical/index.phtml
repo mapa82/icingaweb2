@@ -1,15 +1,93 @@
 <?php if (!$this->compact): ?>
-<div class="controls">
-    <?= $this->tabs ?>
-</div>
+    <div class="controls">
+        <?= $this->tabs ?>
+    </div>
 <?php endif ?>
 <div class="content tactical grid">
     <div class="boxview" data-base-target="_next">
-<?php if ($this->statusSummary->hosts_down || $this->statusSummary->hosts_unreachable): ?>
-        <?= $this->render('tactical/components/problem_hosts.phtml'); ?>
-<?php endif ?>
-<?php if ($this->statusSummary->hosts_up || $this->statusSummary->hosts_pending): ?>
-        <?= $this->render('tactical/components/ok_hosts.phtml'); ?>
-<?php endif ?>
+        <div id="svg-donut-hosts" class="container svg-donut-container">
+            <h2>Host Summary</h2>
+            <div class="container svg-donut">
+                <?= $hostStatusSummaryChart ?>
+            </div>
+            <table class="donut-table">
+                <tbody>
+                <tr>
+                    <th class="state state-ok"><?= $statusSummary->hosts_up ?></th>
+                    <td>Up</td>
+                </tr>
+                <tr>
+                    <th class="state slice-state-critical-handled"><?= $statusSummary->hosts_down_handled ?></th>
+                    <td>Down handled</td>
+                </tr>
+
+                <tr>
+                    <th class="state state-critical"><?= $statusSummary->hosts_down_unhandled ?></th>
+                    <td>Down</td>
+                </tr><tr>
+                    <th class="state slice-state-unreachable-handled"><?= $statusSummary->hosts_unreachable_handled ?></th>
+                    <td>Unreachable handled</td>
+                </tr>
+                <tr>
+                    <th class="state state-unreachable"><?= $statusSummary->hosts_unreachable_unhandled ?></th>
+                    <td>Unreachable</td>
+                </tr>
+                <tr>
+                    <th class="state state-pending"><?= $statusSummary->hosts_pending ?></th>
+                    <td>Pending</td>
+                </tr>
+                <tr>
+                    <th class="state slice-state-not-checked"><?= $statusSummary->hosts_not_checked ?></th>
+                    <td>Not Checked</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="svg-donut-services" class="container svg-donut-container">
+            <h2>Service Summary</h2>
+            <div class="container svg-donut">
+                <?= $serviceStatusSummaryChart ?>
+            </div>
+            <table class="donut-table">
+                <tbody>
+                <tr>
+                    <th class="state state-ok"><?= $statusSummary->services_ok ?></th>
+                    <td>Ok</td>
+                </tr>
+                <tr>
+                    <th class="state slice-state-warning-handled"><?= $statusSummary->services_warning_handled ?></th>
+                    <td>Warning handled</td>
+                </tr>
+
+                <tr>
+                    <th class="state state-warning"><?= $statusSummary->services_warning_unhandled ?></th>
+                    <td>Warning</td>
+                </tr><tr>
+                    <th class="state slice-state-critical-handled"><?= $statusSummary->services_critical_handled ?></th>
+                    <td>Critical handled</td>
+                </tr>
+                <tr>
+                    <th class="state state-critical"><?= $statusSummary->services_critical_unhandled ?></th>
+                    <td>Critical</td>
+                </tr>
+                <tr>
+                    <th class="state slice-state-unknown-handled"><?= $statusSummary->services_unknown_handled ?></th>
+                    <td>Unknown handled</td>
+                </tr>
+                <tr>
+                    <th class="state slice-state-unknown"><?= $statusSummary->services_unknown_unhandled ?></th>
+                    <td>Unknown</td>
+                </tr>
+                <tr>
+                    <th class="state slice-state-pending"><?= $statusSummary->services_pending ?></th>
+                    <td>Pending</td>
+                </tr>
+                <tr>
+                    <th class="state slice-state-not-checked"><?= $statusSummary->services_not_checked ?></th>
+                    <td>Not Checked</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

@@ -84,6 +84,7 @@ class Donut
      */
     public function setThickness($thickness) {
         $this->thickness = $thickness;
+
         return $this;
     }
 
@@ -96,6 +97,7 @@ class Donut
      */
     public function setCenterColor($centerColor) {
         $this->centerColor = $centerColor;
+
         return $this;
     }
 
@@ -108,6 +110,7 @@ class Donut
      */
     public function setLabelBig($labelBig) {
         $this->labelBig = $labelBig;
+
         return $this;
     }
 
@@ -120,6 +123,7 @@ class Donut
      */
     public function setLabelSmall($labelSmall) {
         $this->labelSmall = $labelSmall;
+
         return $this;
     }
 
@@ -180,7 +184,6 @@ class Donut
         }
 
         if ($this->labelBig || $this->labelSmall) {
-
             $text = array(
                 'tag' => 'g',
                 'attributes' => array(
@@ -197,7 +200,7 @@ class Donut
                         'x' => '50%',
                         'y' => '50%'
                     ),
-                    'content' => $this->labelBig
+                    'content' => $this->shortenLabel($this->labelBig)
                 );
             }
 
@@ -217,6 +220,24 @@ class Donut
         }
 
         return $svg;
+    }
+
+    /**
+     * Shorten the label to 3 digits if it is numeric
+     *
+     * 10 => 10 ... 1111 => ~1k ... 1888 => ~2k
+     *
+     * @param   int|string  $label
+     *
+     * @return  string
+     */
+    protected function shortenLabel($label) {
+        if (is_numeric($label) && strlen($label) > 3) {
+
+            return '~' . substr(round($label, -3), 0, 1) . 'k';
+        }
+
+        return $label;
     }
 
     protected function encode($content)
