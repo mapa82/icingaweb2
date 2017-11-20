@@ -53,27 +53,6 @@ class TacticalController extends Controller
 
         $summary = $stats->fetchRow();
 
-
-
-        //ExampleData:
-
-        $summary->hosts_down_handled = 2;
-        $summary->hosts_down_unhandled = 4;
-        $summary->hosts_unreachable_handled = 2;
-        $summary->hosts_unreachable_unhandled = 5;
-        $summary->hosts_not_checked = 1;
-
-        $summary->services_warning_handled = 13;
-        $summary->services_critical_handled = 15;
-        $summary->services_critical_unhandled = 100;
-        $summary->services_unknown_handled = 2;
-        $summary->services_unknown_unhandled = 3;
-        $summary->services_not_checked = 4;
-
-
-
-
-
         $hostSummaryChart = new Donut();
         $hostSummaryChart
             ->addSlice($summary->hosts_up, array('class' => 'slice-state-ok'))
@@ -83,9 +62,13 @@ class TacticalController extends Controller
             ->addSlice($summary->hosts_unreachable_unhandled, array('class' => 'slice-state-unreachable'))
             ->addSlice($summary->hosts_pending, array('class' => 'slice-state-pending'))
             ->addSlice($summary->hosts_not_checked, array('class' => 'slice-state-not-checked'));
-        if($summary->hosts_down_unhandled) {
+
+        if ($summary->hosts_down_unhandled > 1) {
             $hostSummaryChart->setLabelBig($summary->hosts_down_unhandled)
-                ->setLabelSmall('hosts down');
+                ->setLabelSmall($this->translate('hosts down'));
+        } else if ($summary->hosts_down_unhandled === 1) {
+            $hostSummaryChart->setLabelBig($summary->hosts_down_unhandled)
+                ->setLabelSmall($this->translate('host down'));
         }
         $hostSummaryChart = $hostSummaryChart->render();
 
@@ -101,9 +84,12 @@ class TacticalController extends Controller
             ->addSlice($summary->services_pending, array('class' => 'slice-state-pending'))
             ->addSlice($summary->services_not_checked, array('class' => 'slice-state-not-checked'));
 
-        if($summary->services_critical_unhandled) {
+        if($summary->services_critical_unhandled > 1) {
             $serviceSummaryChart->setLabelBig($summary->services_critical_unhandled)
-                ->setLabelSmall('services critical');
+                ->setLabelSmall($this->translate('services critical'));
+        } else if ($summary->services_critical_unhandled === 1) {
+            $hostSummaryChart->setLabelBig($summary->hosts_down_unhandled)
+                ->setLabelSmall($this->translate('service critical'));
         }
         $serviceSummaryChart = $serviceSummaryChart->render();
 

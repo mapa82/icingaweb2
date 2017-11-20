@@ -156,12 +156,27 @@ class Donut
             )
         );
 
+        // When there is no data show gray circle
+        $svg['content'][] = array(
+            'tag'        => 'circle',
+            'attributes' => array(
+                'cx'           => 20,
+                'cy'           => 20,
+                'r'            => $this->radius,
+                'fill'         => 'transparent',
+                'stroke'       => '#ddd',
+                'stroke-width' => $this->thickness
+            )
+        );
+
         $slices = $this->slices;
 
-        array_walk($slices, function(&$slice) {
+        if ($this->count !== 0) {
+            array_walk($slices, function (&$slice) {
 
-            $slice[0] = round(100 / $this->count * $slice[0], 2);
-        });
+                $slice[0] = round(100 / $this->count * $slice[0], 2);
+            });
+        }
 
         // on 0 the donut would start at "3 o'clock" and the offset shifts counterclockwise
         $offset = 25;
@@ -183,7 +198,7 @@ class Donut
             $offset -= $slice[0];
         }
 
-        if ($this->labelBig || $this->labelSmall) {
+        if (isset($this->labelBig) || isset($this->labelSmall)) {
             $text = array(
                 'tag' => 'g',
                 'attributes' => array(
@@ -192,11 +207,11 @@ class Donut
                 'content' => array()
             );
 
-            if ($this->labelBig) {
+            if (isset($this->labelBig)) {
                 $text['content'][] = array(
                     'tag' => 'text',
                     'attributes' => array(
-                        'class' => 'svg-donut-label-big',
+                        'class' => 'svg-donut-label-big-red',
                         'x' => '50%',
                         'y' => '50%'
                     ),
@@ -204,7 +219,7 @@ class Donut
                 );
             }
 
-            if ($this->labelSmall) {
+            if (isset($this->labelSmall)) {
                 $text['content'][] = array(
                     'tag' => 'text',
                     'attributes' => array(

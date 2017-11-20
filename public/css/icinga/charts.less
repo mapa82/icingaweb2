@@ -2,46 +2,57 @@
 
 .slice-state-ok {
  stroke: @color-ok;
+  background: @color-ok;
 }
 
 .slice-state-warning-handled {
   stroke: @color-warning-handled;
+  background: @color-warning-handled;
 }
 
 .slice-state-warning {
   stroke: @color-warning;
+  background: @color-unreachable-handled;
 }
 
 .slice-state-critical-handled {
   stroke: @color-critical-handled;
+  background: @color-critical-handled;
 }
 
 .slice-state-critical {
   stroke: @color-critical;
+  background: @color-critical;
 }
 
 .slice-state-unknown-handled {
   stroke: @color-unknown-handled;
+  background: @color-unknown-handled;
 }
 
 .slice-state-unknown {
   stroke: @color-unknown;
+  background: @color-unknown;
 }
 
 .slice-state-unreachable-handled {
   stroke: @color-unreachable-handled;
+  background: @color-unreachable-handled;
 }
 
 .slice-state-unreachable {
   stroke: @color-unreachable;
+  background: @color-unreachable;
 }
 
 .slice-state-pending {
   stroke: @color-pending;
+  background: @color-pending;
 }
 
 .slice-state-not-checked {
   stroke: @gray-light;
+  background: @gray-light;
 }
 
 .svg-donut-graph {
@@ -62,8 +73,15 @@
   transform: translateY(0.3em);
 }
 
-.svg-donut-label-big {
+.svg-donut-label-big-red {
   fill: @color-critical;
+  font-size: 1.2em;
+  line-height: 1;
+  text-anchor: middle;
+}
+
+.svg-donut-label-big-green {
+  fill: @color-ok;
   font-size: 1.2em;
   line-height: 1;
   text-anchor: middle;
@@ -82,11 +100,28 @@
 
 .svg-donut-container {
   display: inline-block;
-  width: 49%;
-  min-width: 35em;
+  width: 36em
 }
 
 .svg-donut {
-  width: 50%;
+  width: 22em;
   min-width: 11em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.donut-table {
+  margin-left: -3em;
+  border: 0.2em solid #c9c9c9;
+  padding: 0.4em 0.7em;
+  border-radius: 0.25em;
+  background: #fafafa;
+  max-width: 45%;
+  display: inline-block;
+  vertical-align: middle;
+
+  & > tbody > tr:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
