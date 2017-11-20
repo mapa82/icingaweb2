@@ -5,89 +5,89 @@
 <?php endif ?>
 <div class="content tactical grid">
     <div class="boxview" data-base-target="_next">
-        <div id="svg-donut-hosts" class="container svg-donut-container">
-            <h2>Host Summary</h2>
-            <div class="container svg-donut">
+        <div class="svg-donut-container">
+            <h2><?= $this->translate('Host Summary') ?></h2>
+            <div class="svg-donut">
                 <?= $hostStatusSummaryChart ?>
             </div>
             <table class="donut-table">
-                <tbody>
-                <tr href="/icingaweb2/monitoring/list/hosts?host_state=0&sort=host_last_check&dir=asc">
+            <tbody>
+                <tr href="<?= $this->url('monitoring/list/hosts', array('host_state' => 0, 'sort' => 'host_last_check', 'dir' => 'asc')) ?>">
                     <th class="state state-ok badge"><?= $statusSummary->hosts_up ?></th>
-                    <td>Up</td>
+                    <td><?= $this->translate('Up') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/hosts?host_state=1&host_handled=1&sort=host_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/hosts', array('host_state' => 1, 'host_handled' => 1, 'sort' => 'host_last_check', 'dir' => 'asc')) ?>">
                     <th class="state slice-state-critical-handled badge"><?= $statusSummary->hosts_down_handled ?></th>
-                    <td>Down handled</td>
+                    <td><?= $this->translate('Down handled') ?></td>
                 </tr>
 
-                <tr href="/icingaweb2/monitoring/list/hosts?host_state=1&host_handled=0&sort=host_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/hosts', array('host_state' => 1, 'host_handled' => 0, 'sort' => 'host_last_check', 'dir' => 'asc')) ?>">
                     <th class="state state-critical badge"><?= $statusSummary->hosts_down_unhandled ?></th>
-                    <td>Down</td>
+                    <td><?= $this->translate('Down') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/hosts?host_state=2&host_handled=1&sort=host_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/hosts', array('host_state' => 2, 'host_handled' => 1, 'sort' => 'host_last_check', 'dir' => 'asc')) ?>">
                     <th class="state slice-state-unreachable-handled badge"><?= $statusSummary->hosts_unreachable_handled ?></th>
-                    <td>Unreachable handled</td>
+                    <td><?= $this->translate('Unreachable handled') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/hosts?host_state=2&host_handled=0&sort=host_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/hosts', array('host_state' => 2, 'host_handled' => 0, 'sort' => 'host_last_check', 'dir' => 'asc')) ?>">
                     <th class="state state-unreachable badge"><?= $statusSummary->hosts_unreachable_unhandled ?></th>
-                    <td>Unreachable</td>
+                    <td><?= $this->translate('Unreachable') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/hosts?host_state=99&sort=host_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/hosts', array('host_state' => 99, 'sort' => 'host_last_check', 'dir' => 'asc')) ?>">
                     <th class="state state-pending badge"><?= $statusSummary->hosts_pending ?></th>
-                    <td>Pending</td>
+                    <td><?= $this->translate('Pending') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/hosts?host_active_checks_enabled=0&host_passive_checks_enabled=0&sort=host_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/hosts', array('host_active_checks_enabled' => 0, 'host_passive_checks_enabled' => 0, 'sort' => 'host_last_check', 'dir' => 'asc')) ?>">
                     <th class="state slice-state-not-checked badge"><?= $statusSummary->hosts_not_checked ?></th>
-                    <td>Not Checked</td>
+                    <td><?= $this->translate('Not Checked') ?></td>
                 </tr>
-                </tbody>
+            </tbody>
             </table>
         </div>
-        <div id="svg-donut-services" class="container svg-donut-container">
-            <h2>Service Summary</h2>
-            <div class="container svg-donut">
+        <div class="svg-donut-container">
+            <h2><?= $this->translate('Service Summary') ?></h2>
+            <div class="svg-donut">
                 <?= $serviceStatusSummaryChart ?>
             </div>
             <table class="donut-table">
-                <tbody>
-                <tr href="/icingaweb2/monitoring/list/services?service_state=0&sort=service_last_check&dir=asc">
+            <tbody>
+                <tr href="<?= $this->url('monitoring/list/services', array('service_state' => 0, 'sort' => 'service_last_check', 'dir' => 'asc')) ?>">
                     <th class="state state-ok badge"><?= $statusSummary->services_ok ?></th>
-                    <td>Ok</td>
+                    <td><?= $this->translate('Ok') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/services?service_state=1&service_handled=1&sort=service_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/services', array('service_state' => 1, 'service_handled' => 1, 'sort' => 'service_last_check', 'dir' => 'asc')) ?>">
                     <th class="state slice-state-warning-handled badge"><?= $statusSummary->services_warning_handled ?></th>
-                    <td>Warning handled</td>
+                    <td><?= $this->translate('Warning handled') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/services?service_state=1&service_handled=0&sort=service_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/services', array('service_state' => 1, 'service_handled' => 0, 'sort' => 'service_last_check', 'dir' => 'asc')) ?>">
                     <th class="state state-warning badge"><?= $statusSummary->services_warning_unhandled ?></th>
-                    <td>Warning</td>
+                    <td><?= $this->translate('Warning') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/services?service_state=2&service_handled=1&sort=service_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/services', array('service_state' => 2, 'service_handled' => 1, 'sort' => 'service_last_check', 'dir' => 'asc')) ?>">
                     <th class="state slice-state-critical-handled badge"><?= $statusSummary->services_critical_handled ?></th>
-                    <td>Critical handled</td>
+                    <td><?= $this->translate('Critical handled') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/services?service_state=2&service_handled=0&sort=service_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/services', array('service_state' => 2, 'service_handled' => 0, 'sort' => 'service_last_check', 'dir' => 'asc')) ?>">
                     <th class="state state-critical badge"><?= $statusSummary->services_critical_unhandled ?></th>
-                    <td>Critical</td>
+                    <td><?= $this->translate('Critical') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/services?service_state=3&service_handled=1&sort=service_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/services', array('service_state' => 3, 'service_handled' => 1, 'sort' => 'service_last_check', 'dir' => 'asc')) ?>">
                     <th class="state slice-state-unknown-handled badge"><?= $statusSummary->services_unknown_handled ?></th>
-                    <td>Unknown handled</td>
+                    <td><?= $this->translate('Unknown handled') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/services?service_state=3&service_handled=0&sort=service_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/services', array('service_state' => 3, 'service_handled' => 0, 'sort' => 'service_last_check', 'dir' => 'asc')) ?>">
                     <th class="state slice-state-unknown badge"><?= $statusSummary->services_unknown_unhandled ?></th>
-                    <td>Unknown</td>
+                    <td><?= $this->translate('Unknown') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/services?service_state=99&sort=service_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/services', array('service_state' => 99, 'sort' => 'service_last_check', 'dir' => 'asc')) ?>">
                     <th class="state slice-state-pending badge"><?= $statusSummary->services_pending ?></th>
-                    <td>Pending</td>
+                    <td><?= $this->translate('Pending') ?></td>
                 </tr>
-                <tr href="/icingaweb2/monitoring/list/services?service_active_checks_enabled=0&service_passive_checks_enabled=0&sort=service_last_check&dir=asc">
+                <tr href="<?= $this->url('monitoring/list/services', array('service_active_checks_enabled' => 0, 'service_passive_checks_enabled' => 0, 'sort' => 'service_last_check', 'dir' => 'asc')) ?>">
                     <th class="state slice-state-not-checked badge"><?= $statusSummary->services_not_checked ?></th>
-                    <td>Not Checked</td>
+                    <td><?= $this->translate('Not Checked') ?></td>
                 </tr>
-                </tbody>
+            </tbody>
             </table>
         </div>
     </div>

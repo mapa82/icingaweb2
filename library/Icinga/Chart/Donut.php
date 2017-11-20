@@ -1,4 +1,5 @@
 <?php
+/* Icinga Web 2 | (c) 2017 Icinga Development Team | GPLv2+ */
 
 namespace Icinga\Chart;
 
@@ -82,10 +83,20 @@ class Donut
      *
      * @return  $this
      */
-    public function setThickness($thickness) {
+    public function setThickness($thickness)
+    {
         $this->thickness = $thickness;
 
         return $this;
+    }
+    /**
+     * Get the thickness for this Donut
+     *
+     * @return   integer
+     */
+    public function getThickness()
+    {
+        return $this->thickness;
     }
 
     /**
@@ -95,10 +106,21 @@ class Donut
      *
      * @return  $this
      */
-    public function setCenterColor($centerColor) {
+    public function setCenterColor($centerColor)
+    {
         $this->centerColor = $centerColor;
 
         return $this;
+    }
+
+    /**
+     * Get the center color for this Donut
+     *
+     * @return   string
+     */
+    public function getCenterColor()
+    {
+        return $this->centerColor;
     }
 
     /**
@@ -108,10 +130,21 @@ class Donut
      *
      * @return  $this
      */
-    public function setLabelBig($labelBig) {
+    public function setLabelBig($labelBig)
+    {
         $this->labelBig = $labelBig;
 
         return $this;
+    }
+
+    /**
+     * Get the text of the big label
+     *
+     * @return    string
+     */
+    public function getLabelBig()
+    {
+        return $this->labelBig;
     }
 
     /**
@@ -121,10 +154,21 @@ class Donut
      *
      * @return  $this
      */
-    public function setLabelSmall($labelSmall) {
+    public function setLabelSmall($labelSmall)
+    {
         $this->labelSmall = $labelSmall;
 
         return $this;
+    }
+
+    /**
+     * Get the text of the small label
+     *
+     * @return string
+     */
+    public function getLabelSmall()
+    {
+        return $this->labelSmall;
     }
 
     /**
@@ -152,7 +196,7 @@ class Donut
                 'cx'   => 20,
                 'cy'   => 20,
                 'r'    => $this->radius,
-                'fill' => 'transparent'
+                'fill' => $this->getCenterColor()
             )
         );
 
@@ -163,9 +207,9 @@ class Donut
                 'cx'           => 20,
                 'cy'           => 20,
                 'r'            => $this->radius,
-                'fill'         => 'transparent',
-                'stroke'       => '#ddd',
-                'stroke-width' => $this->thickness
+                'fill'         => $this->getCenterColor(),
+                'stroke-width' => $this->getThickness(),
+                'class'        => 'slice-state-not-checked'
             )
         );
 
@@ -173,7 +217,6 @@ class Donut
 
         if ($this->count !== 0) {
             array_walk($slices, function (&$slice) {
-
                 $slice[0] = round(100 / $this->count * $slice[0], 2);
             });
         }
@@ -189,7 +232,7 @@ class Donut
                     'cy'                => 20,
                     'r'                 => $this->radius,
                     'fill'              => 'transparent',
-                    'stroke-width'      => $this->thickness,
+                    'stroke-width'      => $this->getThickness(),
                     'stroke-dasharray'  => $slice[0] . ' ' . (99.9 - $slice[0]), // 99.9 prevents gaps (overlap slightly)
                     'stroke-dashoffset' => $offset
                 )
@@ -198,7 +241,7 @@ class Donut
             $offset -= $slice[0];
         }
 
-        if (isset($this->labelBig) || isset($this->labelSmall)) {
+        if ($this->getLabelBig() || $this->getLabelSmall()) {
             $text = array(
                 'tag' => 'g',
                 'attributes' => array(
@@ -207,7 +250,7 @@ class Donut
                 'content' => array()
             );
 
-            if (isset($this->labelBig)) {
+            if ($this->getLabelBig()) {
                 $text['content'][] = array(
                     'tag' => 'text',
                     'attributes' => array(
@@ -215,11 +258,11 @@ class Donut
                         'x' => '50%',
                         'y' => '50%'
                     ),
-                    'content' => $this->shortenLabel($this->labelBig)
+                    'content' => $this->shortenLabel($this->getLabelBig())
                 );
             }
 
-            if (isset($this->labelSmall)) {
+            if ($this->getLabelSmall()) {
                 $text['content'][] = array(
                     'tag' => 'text',
                     'attributes' => array(
@@ -227,7 +270,7 @@ class Donut
                         'x' => '50%',
                         'y' => '50%'
                     ),
-                    'content' => $this->labelSmall
+                    'content' => $this->getLabelSmall()
                 );
             }
 
@@ -246,7 +289,8 @@ class Donut
      *
      * @return  string
      */
-    protected function shortenLabel($label) {
+    protected function shortenLabel($label)
+    {
         if (is_numeric($label) && strlen($label) > 3) {
 
             return '~' . substr(round($label, -3), 0, 1) . 'k';
