@@ -5,6 +5,19 @@ namespace Icinga\Chart;
 /** Donut chart implementation */
 class Donut
 {
+    /**
+     * Big label in the middle of the donut, color is critical (red)
+     *
+     * @var string
+     */
+    protected $labelBig;
+
+    /**
+     * Small label in the lower part of the donuts hole
+     *
+     * @var string
+     */
+    protected $labelSmall;
 
     /**
      * Thickness of the donut ring
@@ -87,6 +100,30 @@ class Donut
     }
 
     /**
+     * Set the text of the big label
+     *
+     * @param   string  $labelBig
+     *
+     * @return  $this
+     */
+    public function setLabelBig($labelBig) {
+        $this->labelBig = $labelBig;
+        return $this;
+    }
+
+    /**
+     * Set the text of the small label
+     *
+     * @param   string  $labelSmall
+     *
+     * @return  $this
+     */
+    public function setLabelSmall($labelSmall) {
+        $this->labelSmall = $labelSmall;
+        return $this;
+    }
+
+    /**
      * Put together all slices of this Donut
      *
      * @return  array   $svg
@@ -134,12 +171,49 @@ class Donut
                     'r'                 => $this->radius,
                     'fill'              => 'transparent',
                     'stroke-width'      => $this->thickness,
-                    'stroke-dasharray'  => $slice[0] . ' ' . (100 - $slice[0]),
+                    'stroke-dasharray'  => $slice[0] . ' ' . (99.9 - $slice[0]), // 99.9 prevents gaps (overlap slightly)
                     'stroke-dashoffset' => $offset
                 )
             );
             // negative values shift in the clockwise direction
             $offset -= $slice[0];
+        }
+
+        if ($this->labelBig || $this->labelSmall) {
+
+            $text = array(
+                'tag' => 'g',
+                'attributes' => array(
+                    'class' => 'svg-donut-label'
+                ),
+                'content' => array()
+            );
+
+            if ($this->labelBig) {
+                $text['content'][] = array(
+                    'tag' => 'text',
+                    'attributes' => array(
+                        'class' => 'svg-donut-label-big',
+                        'x' => '50%',
+                        'y' => '50%'
+                    ),
+                    'content' => $this->labelBig
+                );
+            }
+
+            if ($this->labelSmall) {
+                $text['content'][] = array(
+                    'tag' => 'text',
+                    'attributes' => array(
+                        'class' => 'svg-donut-label-small',
+                        'x' => '50%',
+                        'y' => '50%'
+                    ),
+                    'content' => $this->labelSmall
+                );
+            }
+
+            $svg['content'][] = $text;
         }
 
         return $svg;
