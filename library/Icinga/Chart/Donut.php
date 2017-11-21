@@ -250,11 +250,12 @@ class Donut
                 'content' => array()
             );
 
+            // todo(JeM): Make this a clickable link
             if ($this->getLabelBig()) {
                 $text['content'][] = array(
                     'tag' => 'text',
                     'attributes' => array(
-                        'class' => 'svg-donut-label-big-red',
+                        'class' => 'svg-donut-label-big',
                         'x' => '50%',
                         'y' => '50%'
                     ),
