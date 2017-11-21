@@ -93,8 +93,8 @@ class TacticalController extends Controller
                 ->setLabelSmall($this->translate('service critical'));
         }
 
-        $this->view->hostStatusSummaryChart = $hostSummaryChart->render();
-        $this->view->serviceStatusSummaryChart = $serviceSummaryChart->render();
+        $this->view->hostStatusSummaryChart = $hostSummaryChart->setLabelBigUrl($this->view->url('monitoring/list/hosts', array('host_state' => 1, 'host_handled' => 0, 'sort' => 'host_last_check', 'dir' => 'asc')))->render();
+        $this->view->serviceStatusSummaryChart = $serviceSummaryChart->setLabelBigUrl($this->view->url('monitoring/list/services', array('service_state' => 2, 'service_handled' => 0, 'sort' => 'service_last_check', 'dir' => 'asc')))->render();
         $this->view->statusSummary = $summary;
     }
 }

@@ -3,6 +3,8 @@
 
 namespace Icinga\Chart;
 
+use Icinga\Web\Url;
+
 /** Donut chart implementation */
 class Donut
 {
@@ -12,6 +14,13 @@ class Donut
      * @var string
      */
     protected $labelBig;
+
+    /**
+     * Url behind the big label
+     *
+     * @var Url
+     */
+    protected $labelBigUrl;
 
     /**
      * Small label in the lower part of the donuts hole
@@ -148,6 +157,30 @@ class Donut
     }
 
     /**
+     * Set the url behind the big label
+     *
+     * @param   Url   $labelBigUrl
+     *
+     * @return  $this
+     */
+    public function setLabelBigUrl($labelBigUrl)
+    {
+        $this->labelBigUrl = $labelBigUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get the url behind the big label
+     *
+     * @return  Url
+     */
+    public function getLabelBigUrl()
+    {
+        return $this->labelBigUrl;
+    }
+
+    /**
      * Set the text of the small label
      *
      * @param   string  $labelSmall
@@ -250,16 +283,23 @@ class Donut
                 'content' => array()
             );
 
-            // todo(JeM): Make this a clickable link
             if ($this->getLabelBig()) {
                 $text['content'][] = array(
                     'tag' => 'text',
                     'attributes' => array(
-                        'class' => 'svg-donut-label-big',
                         'x' => '50%',
                         'y' => '50%'
                     ),
-                    'content' => $this->shortenLabel($this->getLabelBig())
+                    'content' => array(
+                        array(
+                            'tag'   => 'a',
+                            'attributes' => array(
+                                'href'    => $this->getLabelBigUrl() ? $this->getLabelBigUrl()->getAbsoluteUrl() : null,
+                                'class' => 'svg-donut-label-big'
+                            ),
+                            'content' => $this->shortenLabel($this->getLabelBig())
+                        )
+                    )
                 );
             }
 
